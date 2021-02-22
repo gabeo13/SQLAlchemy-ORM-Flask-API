@@ -1,4 +1,5 @@
 import numpy as np
+import datetime as dt
 
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
@@ -51,8 +52,8 @@ def precipitation():
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
-    """Return a list of all passenger names"""
-    # Query all passengers
+    """Return a list of all dates and precipitations values"""
+    # Query date and precipitation from Measurement class
     results = session.query(Measurement.date,Measurement.prcp).all()
 
     session.close()
@@ -75,8 +76,8 @@ def stations():
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
-    """Return a list of all passenger names"""
-    # Query all passengers
+    """Return a list of stations"""
+    # Query station information from Station class
     results = session.query(Station.station,Station.name).all()
 
     session.close()
@@ -94,28 +95,48 @@ def stations():
 
     return jsonify(res)
 
+@app.route("/api/v1.0/tobs")
+def tobs():
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
 
-# @app.route("/api/v1.0/passengers")
-# def passengers():
-#     # Create our session (link) from Python to the DB
-#     session = Session(engine)
+    """Find most active station and date ranges for previous year"""
+    # Query for active station
+    station_count=func.count(Measurement.station).label('station_count')
 
-#     """Return a list of passenger data including the name, age, and sex of each passenger"""
-#     # Query all passengers
-#     results = session.query(Passenger.name, Passenger.age, Passenger.sex).all()
+    most_active = session.query(Measurement.station, station_count)\
+        .group_by(Measurement.station).order_by(station_count.desc()).first()
 
-#     session.close()
+    # Query for latest data point and calculate year ago using Datetime
 
-#     # Create a dictionary from the row data and append to a list of all_passengers
-#     all_passengers = []
-#     for name, age, sex in results:
-#         passenger_dict = {}
-#         passenger_dict["name"] = name
-#         passenger_dict["age"] = age
-#         passenger_dict["sex"] = sex
-#         all_passengers.append(passenger_dict)
+    last_date=session.query(Measurement.date).order_by(Measurement.date.desc()).first()
 
-#     return jsonify(all_passengers)
+    for i in last_date:
+        date_time_obj = dt.date.fromisoformat(i)
+
+    year_ago =  dt.date(date_time_obj.year,date_time_obj.month,date_time_obj.day) - dt.timedelta(days=365)
+
+    """ Query for dates and temperatures of the most active station for the last year of data """
+
+    results = session.query(Measurement.date,Measurement.tobs)\
+        .filter(Measurement.station==most_active.station)\
+            .filter(Measurement.date >= year_ago)
+
+
+    session.close()
+
+    # Convert query to dictionary
+    date=[row.date for row in results]
+    tobs=[row.tobs for row in results]
+
+    res = {} 
+    for key in date: 
+        for value in tobs: 
+            res[key] = value 
+            tobs.remove(value) 
+            break  
+
+    return jsonify(res)
 
 
 if __name__ == '__main__':
