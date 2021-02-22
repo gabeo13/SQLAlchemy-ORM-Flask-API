@@ -17,7 +17,7 @@ To aid in planning a trip to Hawaii, analyze temperature and precipitation data.
 
 ---
 # Precipitation Analysis
-* As seen in the figure below, it rains quite frequently in Hawaii, suggesting that any traveler come prepared with appropriate rain gear (umbrella, jacket, footwear, etc.)
+As seen in the figures below, it rains quite frequently in Hawaii, suggesting that any traveler come prepared with appropriate rain gear (umbrella, jacket, footwear, etc.). If we look specifically at Figure 2 we see a dramatic spread in potential rainfall. Travels should come prepared to spend some amount of time indoors as well.
 
 ![](img/precip.png)
 
@@ -31,41 +31,49 @@ To aid in planning a trip to Hawaii, analyze temperature and precipitation data.
 
 *Table 2: Total precipitation by station for 6-day trip in early March*
 
+![](img/plot_daily_prcp_nmls.png)
+
+*Fig 2: Precipitation Normals for Trip Date Range*
+
+![](img/daily_prcp_nmls.png)
+
+*Table 3:  Precipitation Normals for Trip Date Range*
+
 ---
 # Temperature Analysis
-In addtion to understanding precipitation levels, temperature must also be evaluated to fully understand what needs to be packed for the trip. In Figure 2 and Table 3 we see that daily normal temperature across the state remain relatively flat over the course of the trip with the average daily temperature plotted in Figure 3. In general temperatures remain relatively temperate year-round as seen in Figure 4. Temperatures do fluctuate enough between summer and winter to be statistically significant as seen in Figure 5, and this must be evaluated while planning future trips. 
+In addtion to understanding precipitation levels, temperature must also be evaluated to fully understand what needs to be packed for the trip. In Figure 3 and Table 4 we see that daily normal temperature across the state remain relatively flat over the course of the trip with the average daily temperature plotted in Figure 4. In general temperatures remain relatively temperate year-round as seen in Figure 5. Temperatures do fluctuate enough between summer and winter to be statistically significant as seen in Figure 6, and this must be evaluated while planning future trips. 
 
 ![](img/plot_daily_normals.png)
 
-*Figure 2: Area Plot Daily Normals*
+*Figure 3: Area Plot Daily Normals*
 
 ![](img/daily_normals.png)
 
-*Table 3: Daily Normals*
+*Table 4: Daily Normals*
 
 ![](img/trip_avg_temp.png)
 
-*Figure 3: Average Daily Temperature w/Error Bar*
+*Figure 4: Average Daily Temperature w/Error Bar*
 
 ![](img/temps.png)
 
-*Figure 4: Temperature Distribution for most active station*
+*Figure 5: Temperature Distribution for most active station*
 
 ![](img/ttest.png)
 
-*Figure 5: Paired T-Test Results*
+*Figure 6: Paired T-Test Results*
 
 ---
 # Weather Station Analysis
-Researching the source of the weather data is an important analytical step. From analysis of the station information we determine that there are nine (9) weather stations. Table 4 organizes these stations by frequency of reported measurements. Addtional station information may be found in Table 2.
+Researching the source of the weather data is an important analytical step. From analysis of the station information we determine that there are nine (9) weather stations. Table 5 organizes these stations by frequency of reported measurements. Addtional station information may be found in Table 2.
 
 ![](img/station_count.png)
 
-*Table 4: Frequency of temperature data reporting by station*
+*Table 5: Frequency of temperature data reporting by station*
 
 ![](img/active_station.png)
 
-*Table 5: Temperature measures for most active station*
+*Table 6: Temperature measures for most active station*
 
 ---
 # Climate App {Flask API}

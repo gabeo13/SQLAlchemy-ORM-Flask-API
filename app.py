@@ -138,6 +138,46 @@ def tobs():
 
     return jsonify(res)
 
+@app.route("/api/v1.0/<start>")
+def temperatures(start):
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+
+    """Return a list of all dates and precipitations values"""
+    # Query date and precipitation from Measurement class
+    sel = [func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)]
+
+    results = session.query(*sel).filter(func.strftime("%Y-%m-%d", Measurement.date) >= start).all()
+
+    session.close()
+
+    x,y,z=zip(*results)
+
+    # Convert query to dictionary
+    res={'Minimum Temperature (F)':x[0],'Average Temperature (F)':y[0],'Maximum Temperature (F)':z[0]}
+
+    return jsonify(res)
+
+@app.route("/api/v1.0/<start>/<end>")
+def temp_range(start,end):
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+
+    """Return a list of all dates and precipitations values"""
+    # Query date and precipitation from Measurement class
+    sel = [func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)]
+
+    results = session.query(*sel).filter(func.strftime("%Y-%m-%d", Measurement.date) >= start).filter(func.strftime("%Y-%m-%d", Measurement.date) <= end).all()
+
+    session.close()
+
+    x,y,z=zip(*results)
+
+    # Convert query to dictionary
+    res={'Minimum Temperature (F)':x[0],'Average Temperature (F)':y[0],'Maximum Temperature (F)':z[0]}
+
+    return jsonify(res)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
